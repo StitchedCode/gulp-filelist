@@ -10,10 +10,14 @@ module.exports = function(out, options) {
 
   var onFile = function(file) {
     files.push(file);
-    var path = file.path;
-    if (!options.absolute) {
-      path = path.replace(new RegExp('^' + __dirname + '/'), '');
+    var path;
+    if (options.absolute) {
+      path = file.path;
+    } else {
+      path = file.path.replace(file.base, '');
+      //path = file.path.replace(new RegExp('^' + __dirname + '/'), '');
     }
+    console.log(path);
     filePaths.push(path);
   };
 
