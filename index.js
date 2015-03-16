@@ -5,11 +5,9 @@ module.exports = function(out, options) {
 
   options = options || {};
 
-  var files = [];
-  var filePaths = [];
+  var manifest = {};
 
   var onFile = function(file) {
-    files.push(file);
     var path;
     if (options.absolute) {
       path = file.path;
@@ -18,14 +16,14 @@ module.exports = function(out, options) {
       path = file.path.replace(file.base, options.prefix);
       //path = file.path.replace(new RegExp('^' + __dirname + '/'), '');
     }
-    filePaths.push(path);
+    manifest[file.path.replace(file.base+'/', '')] = path;
   };
 
   var onEnd = function() {
 
     var file = new File({
       path: out,
-      contents: new Buffer(JSON.stringify(filePaths, null, '  '))
+      contents: new Buffer(JSON.stringify(manifest, null, '  '))
     });
 
     this.emit('data', file);
